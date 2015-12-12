@@ -54,7 +54,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p class="lead">Developers may want to check out <a href="target-dotnet-platforms.html">Targeting Dotnet Platforms</a> and <a href="targeting-dotnet-versions.html">Targeting .NET Framework Versions</a> to learn more about targeting .NET Framework versions.</p>
+            <p class="lead">Developers may want to check out <a href="target-dotnet-platforms.html">Targeting Dotnet Platforms</a> to learn more about targeting .NET Framework versions.</p>
           </div>
         </div>
     </div>
@@ -65,7 +65,8 @@
 document.title = "Install .NET Framework Versions";
 $(document).ready(function() {
     var data;
-    var json = "platforms.json";
+    //var json = "platforms.json";
+    var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
     $.support.cors = true;
     $.getJSON( json, function( d ) {
 
