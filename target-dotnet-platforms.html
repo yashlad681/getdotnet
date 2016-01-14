@@ -43,7 +43,7 @@
             <div class="col-md-12">
                 <h1>Targeting .NET Platforms</h1>
 
-                <p class="lead">You can build apps for many platforms and services by downloading .NET Framework targeting packs and SDKs and using them with Visual Studio. Check out the <a href="http://blogs.msdn.com/b/dotnet/archive/tags/announcement/">.NET Framework blog</a> for information on new releases.</p>
+                <p class="lead">You can build apps for many platforms and services by downloading .NET Framework targeting packs and SDKs and using them with Visual Studio. Check out the <a href="http://blogs.msdn.com/b/dotnet/archive/tags/announcement/">.NET Framework blog</a> for information on new releases. Information on the Lifecycle Policy for various .NET Framework versions can be found on the <a href="http://go.microsoft.com/fwlink/?LinkID=507568">Support Lifecycle Policy FAQ</a>.</p>
 
                 <p class="lead">The downloads available differ by Visual Studio version. Pick your Visual Studio version by using the buttons below.</p>
 
@@ -70,7 +70,8 @@ th p {font-size: 16px; margin:0px; font-weight: bold;}
 <script>
 $(document).ready(function() {
     var data;
-    var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
+    // var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
+    var json = "https://raw.githubusercontent.com/Microsoft/dotnet/master/data/platforms.json";
     //var json ="platforms.json";
     $.support.cors = true;
     $.getJSON( json, function( d ) {    
@@ -127,8 +128,14 @@ $(document).ready(function() {
 
     function generateTable(category, vs, data )
     {
-        $("#platforms").append("<table class=table table-striped id="+ category +"><thead id="+ category +"_thead><tr><th><p>Platform</p></th><th><p>Downloads</p></th></tr></thead><tbody id="+ category +"_tbody></tbody></table>");
+        var htmlTable = "<table class=table table-striped id="+ category +"><thead id="+ category +"_thead><tr><th><p>Platform</p></th>";
+        if (category === "netfx") {
+            htmlTable += "<th>Supported</th>";
+        }
+        htmlTable += "<th><p>Downloads</p></th></tr></thead><tbody id="+ category +"_tbody></tbody></table>";  
+        $("#platforms").append(htmlTable);
         var tbody = "#" + category + "_tbody"
+        console.log(tbody);
         $.each(data.platforms,function(key,val)
         {
             if (category != val.category)
@@ -142,7 +149,14 @@ $(document).ready(function() {
             }
 
             var row = generateRow(val, vs);
-            $(tbody).append("<tr><td><p><a href=" +val.info+">"+val.platform+"</a></p></td><td>"+ row +"</td></tr>");
+            var htmlRow = "<tr><td><a href='" + val.info + "'>" + val.platform +"</a></td>";
+            if (category === "netfx") {
+                htmlRow += "<td>" + val.support + "</td>";
+            }
+            htmlRow += "<td>" + row + "</td></tr>";
+            console.log(htmlRow);
+            // htmlRow = "<tr><td colspan='3'>dsadas</td></tr>";
+            $(tbody).append(htmlRow);
         });
     }
 
