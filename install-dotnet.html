@@ -47,7 +47,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-              <h2>Available .NET Versions</h2>
+              <h2>Popular .NET Versions</h2>
               <!--<ul id="versions" class="list-group"></ul>-->
               <div id="versionsList"></div>
             </div>
@@ -66,7 +66,8 @@ document.title = "Install .NET Framework Versions";
 $(document).ready(function() {
     var data;
     //var json = "platforms.json";
-    var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
+    // var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
+    var json = "https://raw.githubusercontent.com/Microsoft/dotnet/master/data/platforms.json";
     $.support.cors = true;
     $.getJSON( json, function( d ) {
 
@@ -75,7 +76,7 @@ $(document).ready(function() {
         $.each(data.platforms, function(key, val)
             {
 
-                if (val.category == "netfx")
+                if (val.category == "netfx" && val.popular)
                 {
                     //$("#versions").append("<li class=list-group-item><a href=" + val.runtime[0].link + ">" + val.platform + "</a></li>");
                     $("#versionsList").append("<a href='"+ val.runtime[0].link +"' class='install-tile'>"+ val.platform +"</a>");

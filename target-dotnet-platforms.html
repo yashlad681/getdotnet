@@ -151,7 +151,12 @@ $(document).ready(function() {
             var row = generateRow(val, vs);
             var htmlRow = "<tr><td><a href='" + val.info + "'>" + val.platform +"</a></td>";
             if (category === "netfx") {
-                htmlRow += "<td>" + val.support + "</td>";
+                if (val.supportInfo.support === "Supported") {
+                    htmlRow += "<td>" + val.supportInfo.support + "</td>";
+                } else {
+                    htmlRow += "<td><a href='" + val.supportInfo.link + "'>" + val.supportInfo.support + "</a></td>";
+              
+                }
             }
             htmlRow += "<td>" + row + "</td></tr>";
             console.log(htmlRow);
