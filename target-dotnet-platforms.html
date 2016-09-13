@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Targeting .NET Platforms</title>
@@ -70,9 +70,7 @@ th p {font-size: 16px; margin:0px; font-weight: bold;}
 <script>
 $(document).ready(function() {
     var data;
-    // var json = "https://dotnetweb.blob.core.windows.net/platforms/platforms.json";
     var json = "https://raw.githubusercontent.com/Microsoft/dotnet/master/data/platforms.json";
-    //var json ="platforms.json";
     $.support.cors = true;
     $.getJSON( json, function( d ) {    
 
@@ -87,6 +85,8 @@ $(document).ready(function() {
 
         $.each(data.platformcategories,function(key,val)
         {
+            if (val.alias == "netcore" && vs != "VS2015") return;
+
             $("#platforms").append("<h2>"+ val.name+"</h2>")
             generateTable(val.alias, vs,data);
         });
@@ -129,13 +129,16 @@ $(document).ready(function() {
     function generateTable(category, vs, data )
     {
         var htmlTable = "<table class=table table-striped id="+ category +"><thead id="+ category +"_thead><tr><th><p>Platform</p></th>";
+        htmlTable += "<th><p>Downloads</p></th>";
+
         if (category === "netfx") {
             htmlTable += "<th>Supported</th>";
         }
-        htmlTable += "<th><p>Downloads</p></th></tr></thead><tbody id="+ category +"_tbody></tbody></table>";  
+
+        htmlTable += "</tr></thead><tbody id=" + category + "_tbody></tbody></table>";
+
         $("#platforms").append(htmlTable);
         var tbody = "#" + category + "_tbody"
-        console.log(tbody);
         $.each(data.platforms,function(key,val)
         {
             if (category != val.category)
@@ -148,8 +151,9 @@ $(document).ready(function() {
                 return;
             }
 
-            var row = generateRow(val, vs);
-            var htmlRow = "<tr><td><a href='" + val.info + "'>" + val.platform +"</a></td>";
+            var htmlRow = "<tr><td><a href='" + val.info + "'>" + val.platform + "</a></td>";
+            htmlRow += "<td>" + generateRow(val, vs) + "</td>";
+
             if (category === "netfx") {
                 if (val.supportInfo.support === "Supported") {
                     htmlRow += "<td>" + val.supportInfo.support + "</td>";
@@ -158,9 +162,8 @@ $(document).ready(function() {
               
                 }
             }
-            htmlRow += "<td>" + row + "</td></tr>";
-            console.log(htmlRow);
-            // htmlRow = "<tr><td colspan='3'>dsadas</td></tr>";
+
+            htmlRow += "</tr>";
             $(tbody).append(htmlRow);
         });
     }
